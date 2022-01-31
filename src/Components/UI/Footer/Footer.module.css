@@ -1,0 +1,13 @@
+.footer {
+  background-color: #111;
+  color: #ddd;
+  width: 100%;
+  min-height: 4rem;
+  text-align: center;
+  margin-top: auto;
+}
+
+.footer--main {
+  font-family: sans-serif;
+  padding: 2rem;
+}
