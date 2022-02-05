@@ -28,9 +28,9 @@ export default function Notes() {
     <>
       {showNewNoteModal && <NewNote onClose={closeModalHandler} newNoteHandler={addNewNoteHandler} />}
       <div className={classes['card-container']}>
-        {notesCtx.notes.map((note) => (
-          <Note content={note} key={note.id} onDelete={deleteNoteHandler} />
-        ))}
+        {notesCtx.isLoading && <h1>Loading, please wait...</h1>}
+        {!notesCtx.isLoading &&
+          notesCtx.notes.map((note) => <Note content={note} key={note.id} onDelete={deleteNoteHandler} />)}
         <button onClick={showNewNoteModalHandler} className={classes['btn-new']}>
           +new note
         </button>
