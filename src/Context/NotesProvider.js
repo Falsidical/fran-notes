@@ -1,6 +1,5 @@
 import React, { useReducer, useEffect, useState } from 'react';
 import NotesContext from './NotesContext';
-import { v4 as uuidv4 } from 'uuid';
 
 const defaultNotes = {
   notes: [],
@@ -15,9 +14,21 @@ const fetchNotesDB = async () => {
       id: key,
       title: data[key].title,
       body: data[key].body,
+      date: data[key].date,
     });
   }
   return notesArray;
+};
+
+const uploadNoteDB = async (note) => {
+  await fetch('https://test-backend-9e37c-default-rtdb.firebaseio.com/notes.json', {
+    method: 'POST',
+    body: JSON.stringify(note),
+  });
+};
+
+const deleteNoteDB = async (id) => {
+  await fetch(`https://test-backend-9e37c-default-rtdb.firebaseio.com/notes/${id}.json`, { method: 'DELETE' });
 };
 
 const notesReducer = (state, action) => {
@@ -28,11 +39,12 @@ const notesReducer = (state, action) => {
 
   if (action.type === 'ADD') {
     const newNote = {
-      id: uuidv4(),
       title: action.note.title,
       body: action.note.body,
+      date: Date.now(),
     };
     const updatedNotes = [...state.notes, newNote];
+    uploadNoteDB(newNote);
 
     return {
       notes: updatedNotes,
@@ -43,6 +55,8 @@ const notesReducer = (state, action) => {
     const updatedNotes = state.notes.filter((note) => {
       return note.id !== action.id;
     });
+
+    deleteNoteDB(action.id);
 
     return {
       notes: updatedNotes,
